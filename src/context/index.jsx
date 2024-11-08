@@ -10,8 +10,10 @@ export const ShoppingCartContext = createContext(null);
 
 function ShoppingCartProvider({children}){
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [listOfProducts, setListOfProducts] = useState ([]);
+  const [productDetails, setProductDetails] = useState(null);
+  const [cartItem, setCartItems] = useState([]);
 
   async function fetchListOfProducts() {
     const apiResponse = await fetch('https://dummyjson.com/products');
@@ -20,17 +22,49 @@ function ShoppingCartProvider({children}){
 
     if(result && result?.products){
       setListOfProducts(result?.products);
+      setLoading(false);
     }
+  }
+
+  function handleAddToCart(getProductDetails){
+    console.log(getProductDetails);
+
+    let cpyExistingCartItem = [...cartItem];
+    const findIndexOfCurrentItem = cpyExistingCartItem.findIndex(cartItem=> cartItem.id === getProductDetails.id);
+
+    console.log(findIndexOfCurrentItem);
+
+    if(findIndexOfCurrentItem === -1){
+      cpyExistingCartItem.push({
+        ...getProductDetails,
+        quantity : 1,
+        totalPrice : getProductDetails?.price
+      })
+    }
+    else{
+
+    }
+    console.log(cpyExistingCartItem,"cpyExistingCartItem");
+    setCartItems(cpyExistingCartItem);
+    localStorage.setItem('cartItem', JSON.stringify(cpyExistingCartItem));
   }
 
   useEffect(() =>{
     fetchListOfProducts()
   },[]);
 
-  console.log(listOfProducts);
+  console.log(cartItem);
 
 
-  return <ShoppingCartContext.Provider value={{ listOfProducts }}>
+  return <ShoppingCartContext.Provider value={{ listOfProducts,
+  loading,
+  setLoading,
+  productDetails,
+  setProductDetails,
+  handleAddToCart,
+  cartItem
+  }}
+  >
     {children}
   </ShoppingCartContext.Provider>
 }
