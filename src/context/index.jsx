@@ -5,6 +5,7 @@
 //consume the context using use context
 
 import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const ShoppingCartContext = createContext(null);
 
@@ -14,6 +15,7 @@ function ShoppingCartProvider({children}){
   const [listOfProducts, setListOfProducts] = useState ([]);
   const [productDetails, setProductDetails] = useState(null);
   const [cartItem, setCartItems] = useState([]);
+  const navigate = useNavigate();
 
   async function fetchListOfProducts() {
     const apiResponse = await fetch('https://dummyjson.com/products');
@@ -42,11 +44,12 @@ function ShoppingCartProvider({children}){
       })
     }
     else{
-
+        console.log("its comming here")
     }
     console.log(cpyExistingCartItem,"cpyExistingCartItem");
     setCartItems(cpyExistingCartItem);
     localStorage.setItem('cartItem', JSON.stringify(cpyExistingCartItem));
+    navigate('/cart');
   }
 
   useEffect(() =>{

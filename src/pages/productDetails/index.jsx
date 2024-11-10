@@ -58,7 +58,7 @@ if(loading) return <h1>Product details loading! please wait</h1>
       </div>
 
       <div className="lg:col-span-2">
-        <h2 className="text-2xl font-extrabold text-[#333333]">{productDetails?.title}</h2>
+        <h2 className="text-2xl font-extrabold text-[#333333] ">{productDetails?.title}</h2>
         <div className="flex flex-wrap gap-4 mt-4">
           <p className="text-xl font-bold">${productDetails?.price}</p>
         </div>
